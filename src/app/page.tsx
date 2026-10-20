@@ -1,0 +1,50 @@
+'use client'
+import { login } from "@/actions/auth";
+import { useActionState } from 'react'
+import Link from "next/link";
+
+export default function Login() {
+  const [state, action, pending] = useActionState(login, undefined)
+  return (
+    <div className="bg-sky-400 h-screen">
+      <div className="flex justify-center items-center h-screen">
+        <div className="bg-white p-8 text-center">
+          <h1>Welcome</h1>
+          <form action={action} className="text-left">
+            <div className="pt-5">
+              <label htmlFor="email">Email</label><br />
+              <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1" id="email" name="email" type="email" placeholder="Email" required />
+              {state?.errors?.email && <p className="text-red-500">{state.errors.email}</p>}
+            </div>
+            <div className="pt-2">
+              <label htmlFor="password">Password</label><br />
+              <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1" id="password" name="password" type="password" placeholder="Password" required />
+              {state?.errors?.password && (
+                <div className="text-red-500">
+                  <p>Password must:</p>
+                  <ul>
+                    {state.errors.password.map((error) => (
+                      <li key={error}>- {error}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-5 text-center">
+              {state?.message && (
+                <p className="text-red-500">{state.message}</p>
+              )}
+              <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-500/50 rounded-lg text-white w-1/1">Login</button>
+            </div>
+          </form>
+          <div className="mt-3">
+            <Link href="/register">
+              Don't have account? Register now
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
