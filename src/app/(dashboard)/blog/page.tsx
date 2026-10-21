@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default async function Page() {
+export default async function Blog() {
     const posts = [
         { id: 1, post: "post1" },
         { id: 2, post: "post2" },

@@ -3,8 +3,9 @@
 import * as z from 'zod'
 import bcrypt from 'bcrypt'
 import { db } from '@/prisma/db'
-import { createSession, deleteSession } from '@/lib/session'
+import { createSession, deleteSession, verifySession } from '@/lib/session'
 import { redirect } from "next/navigation";
+import { UserState } from '@/lib/definitions';
 
 const LoginSchema = z.object({
     email: z.email({ error: 'Please enter a valid email.' }).trim(),
@@ -34,17 +35,6 @@ const RegisterSchema = z.object({
         .string()
         .min(1, { error: 'Username is required' })
 })
-
-type UserState =
-    | {
-        errors?: {
-            email?: string[]
-            password?: string[]
-            username?: string[]
-        }
-        message?: string
-    }
-    | undefined
 
 export async function login(state: UserState, formData: FormData) {
     // Validate form fields
@@ -127,4 +117,19 @@ export async function register(state: UserState, formData: FormData) {
 export async function logout() {
     await deleteSession()
     redirect('/')
+}
+
+export async function getUser() {
+    const session = await verifySession()
+    let userId = Number(session?.userId)
+    if (!userId) {
+        return null
+    } else {
+        const user = db.orm.public.User
+            .select("id", "username", "email")
+            .where({ id: userId })
+            .first()
+
+        return user
+    }
 }
