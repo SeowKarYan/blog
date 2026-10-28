@@ -50,7 +50,6 @@ export async function updateProfile(state: UserState, formData: FormData) {
         .first()
 
     if (duplicateUser) {
-        console.log({duplicateUser})
         return {
             message: 'Email already registered',
         }
@@ -59,6 +58,31 @@ export async function updateProfile(state: UserState, formData: FormData) {
     const updatedUser = await db.orm.public.User
         .where({ id: Number(id) })
         .update({ username, email: email.trim().toLowerCase() });
+
+    redirect('/profile')
+}
+
+export async function changePassword(state: UserState, formData: FormData) {
+    // Validate form fields
+    const validatedFields = PasswordSchema.safeParse({
+        id: formData.get('id'),
+        password: formData.get('password'),
+    })
+
+    // If any form fields are invalid, return early
+    if (!validatedFields.success) {
+        return {
+            errors: z.flattenError(validatedFields.error).fieldErrors,
+        }
+    }
+
+    const { id, password } = validatedFields.data
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const updatedUser = await db.orm.public.User
+        .where({ id: Number(id) })
+        .update({ password: hashedPassword });
 
     redirect('/profile')
 }

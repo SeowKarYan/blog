@@ -3,13 +3,13 @@ import { Sidebar } from "@/component/sidebar";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen flex flex-col">
             <Header />
 
-            <div className="flex">
+            <div className="flex flex-1">
                 <Sidebar />
 
-                <main>{children}</main>
+                <div className="flex-1">{children}</div>
             </div>
         </div>
     );

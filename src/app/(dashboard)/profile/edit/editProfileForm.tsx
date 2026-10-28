@@ -17,7 +17,7 @@ export default function EditProfileForm({
     const [state, action, pending] = useActionState(updateProfile, undefined)
 
     return (
-        <div className="p-5 w-[90vw]">
+        <div className="p-5">
             <form action={action} className="text-left">
                 <div className="pt-5 hidden">
                     <label htmlFor="id">ID</label><br />
@@ -41,8 +41,10 @@ export default function EditProfileForm({
                     {state?.message && (
                         <p className="text-red-500">{state.message}</p>
                     )}
-                    <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-400/75 rounded-lg text-white m-2 w-30">Submit</button>
-                    <button type="button" className="bg-red-400 p-1 hover:bg-red-400/75 rounded-lg text-white m-2 w-30"><Link href="/profile">Cancel</Link></button>
+                    <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-400/75 rounded-lg text-white m-2 w-50">Submit</button>
+                </div>
+                <div className="text-center">
+                    <Link href="/profile" className="bg-red-400 p-1 hover:bg-red-400/75 rounded-lg text-white m-2 w-50 inline-block">Cancel</Link>
                 </div>
             </form>
         </div>
