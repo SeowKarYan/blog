@@ -6,7 +6,6 @@ export default async function EditProfile() {
 
     return (
         <EditProfileForm 
-            id={user?.id}
             username={user?.username}
             email={user?.email}
         />

@@ -4,13 +4,11 @@ import Link from "next/link";
 import { useActionState } from 'react'
 
 type Props = {
-    id: number | undefined;
     username: string | undefined;
     email: string | undefined;
 }
 
 export default function EditProfileForm({
-    id,
     username,
     email,
 }: Props) {
@@ -19,12 +17,6 @@ export default function EditProfileForm({
     return (
         <div className="p-5">
             <form action={action} className="text-left">
-                <div className="pt-5 hidden">
-                    <label htmlFor="id">ID</label><br />
-                    <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1" id="id" name="id" type="text" placeholder="Username" defaultValue={id} required />
-                    {state?.errors?.id && <p className="text-red-500">{state.errors.id}</p>}
-                </div>
-
                 <div className="pt-5">
                     <label htmlFor="email">Username</label><br />
                     <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1" id="username" name="username" type="text" placeholder="Username" defaultValue={username} required />

@@ -5,9 +5,9 @@ import { UserState } from '@/lib/definitions';
 import { db } from '@/prisma/db';
 import { not } from '@prisma/orm-postgres/orm-client';
 import { redirect } from 'next/navigation';
+import { verifySession } from '@/lib/session';
 
 const ProfileSchema = z.object({
-    id: z.string().min(1),
     email: z.email({ error: 'Please enter a valid email.' }).trim(),
     username: z
         .string()
@@ -15,7 +15,6 @@ const ProfileSchema = z.object({
 })
 
 const PasswordSchema = z.object({
-    id: z.string().min(1),
     password: z
         .string()
         .min(8, { error: 'Be at least 8 characters long' })
@@ -30,7 +29,6 @@ const PasswordSchema = z.object({
 export async function updateProfile(state: UserState, formData: FormData) {
     // Validate form fields
     const validatedFields = ProfileSchema.safeParse({
-        id: formData.get('id'),
         username: formData.get('username'),
         email: formData.get('email'),
     })
@@ -42,11 +40,20 @@ export async function updateProfile(state: UserState, formData: FormData) {
         }
     }
 
-    const { id, username, email } = validatedFields.data
+    const { username, email } = validatedFields.data
+
+    const session = await verifySession()
+    let userId = Number(session?.userId)
+
+    if (!userId) {
+        return {
+            message: 'Session expired, please login again',
+        }
+    }
 
     const duplicateUser = await db.orm.public.User
         .where({ email: email.trim().toLowerCase() })
-        .where((u) => not(u.id.eq(Number(id))))
+        .where((u) => not(u.id.eq(userId)))
         .first()
 
     if (duplicateUser) {
@@ -56,7 +63,7 @@ export async function updateProfile(state: UserState, formData: FormData) {
     }
 
     const updatedUser = await db.orm.public.User
-        .where({ id: Number(id) })
+        .where({ id: userId })
         .update({ username, email: email.trim().toLowerCase() });
 
     redirect('/profile')
@@ -65,7 +72,6 @@ export async function updateProfile(state: UserState, formData: FormData) {
 export async function changePassword(state: UserState, formData: FormData) {
     // Validate form fields
     const validatedFields = PasswordSchema.safeParse({
-        id: formData.get('id'),
         password: formData.get('password'),
     })
 
@@ -76,12 +82,21 @@ export async function changePassword(state: UserState, formData: FormData) {
         }
     }
 
-    const { id, password } = validatedFields.data
+    const { password } = validatedFields.data
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
+    const session = await verifySession()
+    let userId = Number(session?.userId)
+
+    if (!userId) {
+        return {
+            message: 'Session expired, please login again',
+        }
+    }
+
     const updatedUser = await db.orm.public.User
-        .where({ id: Number(id) })
+        .where({ id: userId })
         .update({ password: hashedPassword });
 
     redirect('/profile')
