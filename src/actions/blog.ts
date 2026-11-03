@@ -83,3 +83,40 @@ export async function createBlog(state: BlogState, formData: FormData) {
 
     redirect('/blog/user')
 }
+
+export async function deleteBlog(blogId: number) {
+    const session = await verifySession()
+    let userId = Number(session?.userId)
+
+    if (!userId) {
+        return {
+            success: false,
+            message: 'Session expired, please login again',
+        }
+    }
+
+    const blog = await db.orm.public.Blog
+        .where({ id: blogId })
+        .first()
+
+    if (!blog) {
+        return {
+            success: false,
+            message: 'Blog not found',
+        }
+    } else if (blog.userId !== userId) {
+        return {
+            success: false,
+            message: 'Blog not belongs to this user, unauthorized to delete',
+        }
+    }
+
+    const deletedBlog = await db.orm.public.Blog
+        .where({ id: blogId })
+        .delete()
+
+    return {
+        success: true,
+        message: "Blog deleted successfully"
+    }
+}

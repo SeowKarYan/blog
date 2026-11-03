@@ -1,5 +1,6 @@
 import { getUserBlogs } from "@/actions/blog";
 import Link from "next/link";
+import DeleteBlog from "../delete/deleteBlog";
 
 export default async function Blog() {
     const blogs = await getUserBlogs()
@@ -12,11 +13,14 @@ export default async function Blog() {
             </div>
             <ul>
                 {blogs.map((blog) => (
-                    <li key={blog.id} className="p-5">
-                        <Link href={`/blog/${blog.id}`}>
-                            {blog.title}
-                        </Link><br />
-                        <small className='bg-blue-400 p-1 rounded-lg text-white'>{blog.category}</small>
+                    <li key={blog.id} className="p-5 flex justify-between items-center">
+                        <div>
+                            <Link href={`/blog/${blog.id}`}>
+                                {blog.title}
+                            </Link><br />
+                            <small className='bg-blue-400 p-1 rounded-lg text-white'>{blog.category}</small>
+                        </div>
+                        <DeleteBlog id={blog.id} />
                     </li>
                 ))}
             </ul>
