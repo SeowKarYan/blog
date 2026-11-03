@@ -5,7 +5,7 @@ export default async function Profile() {
     const user = await getUser()
 
     return (
-        <div className="p-5">
+        <div>
             <div>
                 <p className="font-bold">Username</p>
                 <p>{user?.username}</p>

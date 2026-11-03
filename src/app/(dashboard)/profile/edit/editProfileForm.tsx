@@ -15,7 +15,8 @@ export default function EditProfileForm({
     const [state, action, pending] = useActionState(updateProfile, undefined)
 
     return (
-        <div className="p-5">
+        <div>
+            <h1 className="text-center">Edit Profile</h1>
             <form action={action} className="text-left">
                 <div className="pt-5">
                     <label htmlFor="email">Username</label><br />

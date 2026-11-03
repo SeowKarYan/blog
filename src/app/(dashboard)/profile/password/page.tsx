@@ -8,7 +8,8 @@ export default function ChangePassword() {
     const [state, action, pending] = useActionState(changePassword, undefined)
 
     return (
-        <div className="p-5">
+        <div>
+            <h1 className="text-center">Change Password</h1>
             <form action={action} className="text-left">
                 <div className="pt-5">
                     <label htmlFor="password">Password</label><br />

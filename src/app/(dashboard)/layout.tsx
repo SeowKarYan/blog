@@ -9,7 +9,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <div className="flex flex-1">
                 <Sidebar />
 
-                <div className="flex-1">{children}</div>
+                <div className="flex-1 p-5">{children}</div>
             </div>
         </div>
     );
