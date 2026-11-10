@@ -13,7 +13,7 @@ export default async function Blog() {
                         <Link href={`/blog/${blog.id}`}>
                             {blog.title}
                         </Link><br />
-                        <small className='bg-blue-400 p-1 rounded-lg text-white'>{blog.category}</small>
+                        {blog.category && (<small className='bg-blue-400 p-1 rounded-lg text-white'>{blog.category}</small>)}
                     </li>
                 ))}
             </ul>

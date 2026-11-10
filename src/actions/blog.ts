@@ -18,6 +18,23 @@ const BlogSchema = z.object({
         .optional(),
 })
 
+const UpdateBlogSchema = z.object({
+    blogId: z
+        .string()
+        .trim()
+        .min(1, { error: 'Missing Blog ID' }),
+    title: z
+        .string()
+        .trim()
+        .min(1, { error: 'title is required' }),
+    content: z
+        .string()
+        .optional(),
+    category: z
+        .string()
+        .optional(),
+})
+
 export async function getBlogs() {
     const blogs = db.orm.public.Blog
         .include("user")
@@ -119,4 +136,55 @@ export async function deleteBlog(blogId: number) {
         success: true,
         message: "Blog deleted successfully"
     }
+}
+
+export async function updateBlog(state: BlogState, formData: FormData) {
+    // Validate form fields
+    const validatedFields = UpdateBlogSchema.safeParse({
+        blogId: formData.get('blogId'),
+        title: formData.get('title'),
+        content: formData.get('content') || undefined,
+        category: formData.get('category') || undefined
+    })
+
+    // If any form fields are invalid, return early
+    if (!validatedFields.success) {
+        return {
+            errors: z.flattenError(validatedFields.error).fieldErrors,
+        }
+    }
+
+    const { blogId, title, content, category } = validatedFields.data
+
+    const session = await verifySession()
+    let userId = Number(session?.userId)
+
+    if (!userId) {
+        return {
+            success: false,
+            message: 'Session expired, please login again',
+        }
+    }
+
+    const blog = await db.orm.public.Blog
+        .where({ id: Number(blogId) })
+        .first()
+
+    if (!blog) {
+        return {
+            success: false,
+            message: 'Blog not found',
+        }
+    } else if (blog.userId !== userId) {
+        return {
+            success: false,
+            message: 'Blog not belongs to this user, unauthorized to update',
+        }
+    }
+
+    const updatedBlog = await db.orm.public.Blog
+        .where({ id: Number(blogId) })
+        .update({ title, content, category })
+
+    redirect(`/blog/${blogId}`)
 }

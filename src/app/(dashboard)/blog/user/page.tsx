@@ -18,9 +18,14 @@ export default async function Blog() {
                             <Link href={`/blog/${blog.id}`}>
                                 {blog.title}
                             </Link><br />
-                            <small className='bg-blue-400 p-1 rounded-lg text-white'>{blog.category}</small>
+                            {blog.category && (<small className='bg-blue-400 p-1 rounded-lg text-white'>{blog.category}</small>)}
                         </div>
-                        <DeleteBlog id={blog.id} />
+                        <div className="flex gap-2">
+                            <div>
+                                <Link href={`/blog/edit/${blog.id}`} className="bg-blue-400 p-1 hover:bg-blue-400/75 rounded-lg text-white m-2 inline-block w-1/1 text-center">Edit</Link>
+                            </div>
+                            <DeleteBlog id={blog.id} />
+                        </div>
                     </li>
                 ))}
             </ul>
