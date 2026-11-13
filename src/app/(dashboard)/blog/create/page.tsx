@@ -2,6 +2,7 @@
 import { useActionState } from 'react'
 import { createBlog } from '@/actions/blog';
 import Link from "next/link";
+import Loader from '@/component/loader';
 
 export default function CreateBlog() {
     const [state, action, pending] = useActionState(createBlog, undefined)
@@ -31,7 +32,11 @@ export default function CreateBlog() {
                     {state?.message && (
                         <p className="text-red-500">{state.message}</p>
                     )}
-                    <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-400/75 rounded-lg text-white m-2 w-50">Create</button>
+                    {
+                        pending
+                            ? <Loader />
+                            : <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-400/75 rounded-lg text-white m-2 w-50">Create</button>
+                    }
                 </div>
                 <div className="text-center">
                     <Link href="/blog/user" className="bg-red-400 p-1 hover:bg-red-400/75 rounded-lg text-white m-2 w-50 inline-block">Cancel</Link>

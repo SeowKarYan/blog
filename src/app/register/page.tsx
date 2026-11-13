@@ -2,6 +2,7 @@
 import { register } from "@/actions/auth";
 import { useActionState } from 'react'
 import Link from "next/link";
+import Loader from "@/component/loader";
 
 export default function Register() {
     const [state, action, pending] = useActionState(register, undefined)
@@ -22,7 +23,7 @@ export default function Register() {
                             <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1" id="email" name="email" type="email" placeholder="Email" required />
                             {state?.errors?.email && <p className="text-red-500">{state.errors.email}</p>}
                         </div>
-                        
+
                         <div className="pt-2">
                             <label htmlFor="password">Password</label><br />
                             <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1" id="password" name="password" type="password" placeholder="Password" required />
@@ -42,7 +43,11 @@ export default function Register() {
                             {state?.message && (
                                 <p className="text-red-500">{state.message}</p>
                             )}
-                            <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-500/50 rounded-lg text-white w-1/1">Register</button>
+                            {
+                                pending
+                                    ? <Loader />
+                                    : <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-500/50 rounded-lg text-white w-1/1">Register</button>
+                            }
                         </div>
                     </form>
                     <div className="mt-3">

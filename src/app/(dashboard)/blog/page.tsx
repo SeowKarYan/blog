@@ -10,7 +10,7 @@ export default async function Blog() {
             <ul>
                 {blogs.map((blog) => (
                     <li key={blog.id} className="p-5 bg-gray-200 m-1 rounded-lg">
-                        <Link href={`/blog/${blog.id}`}>
+                        <Link href={`/blog/${blog.id}`} className="hover:text-black/50">
                             {blog.title}
                         </Link><br />
                         {blog.category && (<small className='bg-blue-400 p-1 rounded-lg text-white'>{blog.category}</small>)}

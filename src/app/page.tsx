@@ -2,6 +2,7 @@
 import { login } from "@/actions/auth";
 import { useActionState } from 'react'
 import Link from "next/link";
+import Loader from "@/component/loader";
 
 export default function Login() {
   const [state, action, pending] = useActionState(login, undefined)
@@ -35,7 +36,11 @@ export default function Login() {
               {state?.message && (
                 <p className="text-red-500">{state.message}</p>
               )}
-              <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-500/50 rounded-lg text-white w-1/1">Login</button>
+              {
+                pending
+                  ? <Loader />
+                  : <button type="submit" disabled={pending} className="bg-blue-400 p-1 hover:bg-blue-500/50 rounded-lg text-white w-1/1">Login</button>
+              }
             </div>
           </form>
           <div className="mt-3">

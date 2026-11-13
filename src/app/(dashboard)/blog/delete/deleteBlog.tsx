@@ -1,5 +1,6 @@
 'use client'
 import { deleteBlog } from "@/actions/blog";
+import Loader from "@/component/loader";
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
@@ -78,15 +79,18 @@ export default function DeleteBlog({ id }: Props) {
                                 Cancel
                             </button>
 
-                            <button
-                                type="button"
-                                onClick={handleDelete}
-                                disabled={isPending}
-                                className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-                            >
-                                {isPending ? 'Deleting...' : 'Confirm Delete'}
-                            </button>
-
+                            {
+                                isPending
+                                    ? <Loader />
+                                    : <button
+                                        type="button"
+                                        onClick={handleDelete}
+                                        disabled={isPending}
+                                        className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
+                                    >
+                                        Confirm Delete
+                                    </button>
+                            }
                         </div>
                     </div>
                 </div>
