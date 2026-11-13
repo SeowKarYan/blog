@@ -1,6 +1,7 @@
 'use client'
 import { deleteBlog } from "@/actions/blog";
 import Loader from "@/component/loader";
+import Modal from "@/component/modal";
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
@@ -42,59 +43,55 @@ export default function DeleteBlog({ id }: Props) {
                 Delete
             </button>
 
-            {/* Confirmation Modal */}
-            {isOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <Modal
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+            >
+                <h2 className="text-xl font-semibold text-gray-800">
+                    Delete Blog
+                </h2>
 
-                    <div className="bg-white w-full max-w-md mx-4 rounded-xl shadow-lg p-6">
+                <p className="text-gray-600 mt-3">
+                    Are you sure you want to delete this blog?
+                    This action cannot be undone.
+                </p>
 
-                        <h2 className="text-xl font-semibold text-gray-800">
-                            Delete Blog
-                        </h2>
+                {/* Error Message */}
+                {error && (
+                    <p className="text-red-500 text-sm mt-3">
+                        {error}
+                    </p>
+                )}
 
-                        <p className="text-gray-600 mt-3">
-                            Are you sure you want to delete this blog?
-                            This action cannot be undone.
-                        </p>
+                {/* Modal Buttons */}
+                <div className="flex justify-end gap-3 mt-6">
 
-                        {/* Error Message */}
-                        {error && (
-                            <p className="text-red-500 text-sm mt-3">
-                                {error}
-                            </p>
-                        )}
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setIsOpen(false)
+                            setError('')
+                        }}
+                        disabled={isPending}
+                        className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
+                    >
+                        Cancel
+                    </button>
 
-                        {/* Modal Buttons */}
-                        <div className="flex justify-end gap-3 mt-6">
-
-                            <button
+                    {
+                        isPending
+                            ? <Loader />
+                            : <button
                                 type="button"
-                                onClick={() => {
-                                    setIsOpen(false)
-                                    setError('')
-                                }}
+                                onClick={handleDelete}
                                 disabled={isPending}
-                                className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
+                                className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
                             >
-                                Cancel
+                                Confirm Delete
                             </button>
-
-                            {
-                                isPending
-                                    ? <Loader />
-                                    : <button
-                                        type="button"
-                                        onClick={handleDelete}
-                                        disabled={isPending}
-                                        className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-                                    >
-                                        Confirm Delete
-                                    </button>
-                            }
-                        </div>
-                    </div>
+                    }
                 </div>
-            )}
+            </Modal>
         </div>
     )
 }
