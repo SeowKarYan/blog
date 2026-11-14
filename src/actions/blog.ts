@@ -4,6 +4,7 @@ import { BlogState } from "@/lib/definitions";
 import { verifySession } from "@/lib/session";
 import { db } from "@/prisma/db";
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 const BlogSchema = z.object({
     title: z
@@ -98,6 +99,8 @@ export async function createBlog(state: BlogState, formData: FormData) {
         userId
     })
 
+    revalidatePath('/blog');
+
     redirect('/blog/user')
 }
 
@@ -131,6 +134,8 @@ export async function deleteBlog(blogId: number) {
     const deletedBlog = await db.orm.public.Blog
         .where({ id: blogId })
         .delete()
+
+    revalidatePath('/blog');
 
     return {
         success: true,
@@ -185,6 +190,8 @@ export async function updateBlog(state: BlogState, formData: FormData) {
     const updatedBlog = await db.orm.public.Blog
         .where({ id: Number(blogId) })
         .update({ title, content, category })
+
+    revalidatePath('/blog');
 
     redirect(`/blog/${blogId}`)
 }
