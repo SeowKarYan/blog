@@ -5,35 +5,19 @@ import { verifySession } from "@/lib/session";
 import { db } from "@/prisma/db";
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { checkBlogId, checkBlogTitle, optionalField } from '@/lib/validation';
 
 const BlogSchema = z.object({
-    title: z
-        .string()
-        .trim()
-        .min(1, { error: 'title is required' }),
-    content: z
-        .string()
-        .optional(),
-    category: z
-        .string()
-        .optional(),
+    title: checkBlogTitle,
+    content: optionalField,
+    category: optionalField,
 })
 
 const UpdateBlogSchema = z.object({
-    blogId: z
-        .string()
-        .trim()
-        .min(1, { error: 'Missing Blog ID' }),
-    title: z
-        .string()
-        .trim()
-        .min(1, { error: 'title is required' }),
-    content: z
-        .string()
-        .optional(),
-    category: z
-        .string()
-        .optional(),
+    blogId: checkBlogId,
+    title: checkBlogTitle,
+    content: optionalField,
+    category: optionalField,
 })
 
 export async function getBlogs() {

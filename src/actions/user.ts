@@ -6,24 +6,15 @@ import { db } from '@/prisma/db';
 import { not } from '@prisma/orm-postgres/orm-client';
 import { redirect } from 'next/navigation';
 import { verifySession } from '@/lib/session';
+import { checkEmail, checkPassword, checkUsername } from '@/lib/validation';
 
 const ProfileSchema = z.object({
-    email: z.email({ error: 'Please enter a valid email.' }).trim(),
-    username: z
-        .string()
-        .min(1, { error: 'Username is required' })
+    email: checkEmail,
+    username: checkUsername
 })
 
 const PasswordSchema = z.object({
-    password: z
-        .string()
-        .min(8, { error: 'Be at least 8 characters long' })
-        .regex(/[a-zA-Z]/, { error: 'Contain at least one letter.' })
-        .regex(/[0-9]/, { error: 'Contain at least one number.' })
-        .regex(/[^a-zA-Z0-9]/, {
-            error: 'Contain at least one special character.',
-        })
-        .trim(),
+    password: checkPassword,
 })
 
 export async function updateProfile(state: UserState, formData: FormData) {
