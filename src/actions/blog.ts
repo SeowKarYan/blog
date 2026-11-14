@@ -55,8 +55,8 @@ export async function createBlog(state: BlogState, formData: FormData) {
     // Validate form fields
     const validatedFields = BlogSchema.safeParse({
         title: formData.get('title'),
-        content: formData.get('content') || undefined,
-        category: formData.get('category') || undefined
+        content: formData.get('content') ?? undefined,
+        category: formData.get('category') ?? undefined
     })
 
     // If any form fields are invalid, return early
@@ -133,8 +133,8 @@ export async function updateBlog(state: BlogState, formData: FormData) {
     const validatedFields = UpdateBlogSchema.safeParse({
         blogId: formData.get('blogId'),
         title: formData.get('title'),
-        content: formData.get('content') || undefined,
-        category: formData.get('category') || undefined
+        content: formData.get('content') ?? undefined,
+        category: formData.get('category') ?? undefined
     })
 
     // If any form fields are invalid, return early
