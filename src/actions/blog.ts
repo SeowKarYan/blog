@@ -40,6 +40,7 @@ export async function getBlogs() {
     const blogs = db.orm.public.Blog
         .include("user")
         .orderBy((b) => b.createdAt.desc())
+        .limit(10)
         .all()
 
     return blogs
