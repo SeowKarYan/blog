@@ -3,6 +3,8 @@ import { useActionState } from 'react'
 import { createBlog } from '@/actions/blog';
 import Link from "next/link";
 import Loader from '@/component/loader';
+import Input from '@/component/input';
+import Textarea from '@/component/textarea';
 
 export default function CreateBlog() {
     const [state, action, pending] = useActionState(createBlog, undefined)
@@ -12,19 +14,19 @@ export default function CreateBlog() {
             <form action={action} className="text-left">
                 <div className="pt-5">
                     <label htmlFor="title">Title</label><br />
-                    <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1 ps-1" id="title" name="title" type="text" placeholder="title" required />
+                    <Input id="title" name="title" type="text" placeholder="title" required />
                     {state?.errors?.title && <p className="text-red-500">{state.errors.title}</p>}
                 </div>
 
                 <div className="pt-5">
                     <label htmlFor="category">Category</label><br />
-                    <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1 ps-1" id="category" name="category" type="text" placeholder="category" />
+                    <Input id="category" name="category" type="text" placeholder="category" />
                     {state?.errors?.category && <p className="text-red-500">{state.errors.category}</p>}
                 </div>
 
                 <div className="pt-5">
                     <label htmlFor="content">Content</label><br />
-                    <textarea className="border-solid border-2 border-blue-400 rounded-lg w-1/1 ps-1" id="content" rows={5} cols={40} name="content" placeholder="content" />
+                    <Textarea id="content" rows={5} cols={40} name="content" placeholder="content" />
                     {state?.errors?.content && <p className="text-red-500">{state.errors.content}</p>}
                 </div>
 

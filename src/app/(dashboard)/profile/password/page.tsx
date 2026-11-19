@@ -1,6 +1,7 @@
 'use client'
 
 import { changePassword } from "@/actions/user"
+import Input from "@/component/input"
 import Loader from "@/component/loader"
 import Link from "next/link"
 import { useActionState } from "react"
@@ -14,7 +15,7 @@ export default function ChangePassword() {
             <form action={action} className="text-left">
                 <div className="pt-5">
                     <label htmlFor="password">Password</label><br />
-                    <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1 ps-1" id="password" name="password" type="password" placeholder="Password" required />
+                    <Input id="password" name="password" type="password" placeholder="Password" required />
                     {state?.errors?.password && (
                         <div className="text-red-500">
                             <p>Password must:</p>

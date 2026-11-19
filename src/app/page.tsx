@@ -3,6 +3,7 @@ import { login } from "@/actions/auth";
 import { useActionState } from 'react'
 import Link from "next/link";
 import Loader from "@/component/loader";
+import Input from "@/component/input";
 
 export default function Login() {
   const [state, action, pending] = useActionState(login, undefined)
@@ -14,12 +15,12 @@ export default function Login() {
           <form action={action} className="text-left">
             <div className="pt-5">
               <label htmlFor="email">Email</label><br />
-              <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1 ps-1" id="email" name="email" type="email" placeholder="Email" required />
+              <Input id="email" name="email" type="email" placeholder="Email" required />
               {state?.errors?.email && <p className="text-red-500">{state.errors.email}</p>}
             </div>
             <div className="pt-2">
               <label htmlFor="password">Password</label><br />
-              <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1 ps-1" id="password" name="password" type="password" placeholder="Password" required />
+              <Input id="password" name="password" type="password" placeholder="Password" required />
               {state?.errors?.password && (
                 <div className="text-red-500">
                   <p>Password must:</p>

@@ -1,5 +1,6 @@
 'use client'
 import { updateProfile } from "@/actions/user"
+import Input from "@/component/input";
 import Loader from "@/component/loader";
 import Link from "next/link";
 import { useActionState } from 'react'
@@ -21,13 +22,13 @@ export default function EditProfileForm({
             <form action={action} className="text-left">
                 <div className="pt-5">
                     <label htmlFor="email">Username</label><br />
-                    <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1 ps-1" id="username" name="username" type="text" placeholder="Username" defaultValue={username} required />
+                    <Input id="username" name="username" type="text" placeholder="Username" defaultValue={username} required />
                     {state?.errors?.username && <p className="text-red-500">{state.errors.username}</p>}
                 </div>
 
                 <div className="pt-2">
                     <label htmlFor="email">Email</label><br />
-                    <input className="border-solid border-2 border-blue-400 rounded-lg w-1/1 ps-1" id="email" name="email" type="email" placeholder="Email" defaultValue={email} required />
+                    <Input id="email" name="email" type="email" placeholder="Email" defaultValue={email} required />
                     {state?.errors?.email && <p className="text-red-500">{state.errors.email}</p>}
                 </div>
 
